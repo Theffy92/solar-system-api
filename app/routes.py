@@ -10,9 +10,14 @@ class Planet:
 
 
 planets = [
-    Planet(1, "Mercury", "First planet from the Sun", 1516),
-    Planet(2, "Venus", "Second planet from the Sun", 3760.4),
-    Planet(3, "Earth", "Third planet from the Sun", 3958.8)
+    Planet(1, "Mercury", "Closest planet to the sun", 1516),
+    Planet(2, "Venus", "Hottest planet in our solar system", 3760.4),
+    Planet(3, "Earth", "You are here!", 3958.8),
+    Planet(4, "Mars", "Also known as the Red Planet", 1516),
+    Planet(5, "Jupiter", "Largest planet in our solar system", 43441),
+    Planet(6, "Saturn", "Planet with the lowest mean density", 36184),
+    Planet(7, "Uranus", "Planet with the most extreme seasons in our solar system", 15759),
+    Planet(8, "Neptune", "Farthest planet from the sun", 15299),
 ]
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
