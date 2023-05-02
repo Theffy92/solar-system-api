@@ -55,6 +55,19 @@ def read_planet(planet_id):
         "radius": planet.radius,
     }
 
+@bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.radius = request_body["radius"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated", 200)
 # class Planet:
 
 #     def __init__(self, id, name, description, radius):
