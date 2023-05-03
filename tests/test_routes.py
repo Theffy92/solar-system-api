@@ -21,4 +21,20 @@ def test_get_one_planet_from_empty_database(client):
 
     assert response.status_code == 404
     assert response_body == {'message': 'planet 200 not found'}
+    
+def test_get_all_planets_from_database(client, saved_planets):
+    response = client.get("/planets")
+    response_body = response.get_json()
 
+    assert response.status_code == 200
+    assert response_body[0] == {"id": 1,
+        "name": "Mercury",
+        "description":"Closest planet to the sun",
+        "radius":float(1516)
+    }
+    assert response_body[1]["name"] == "Venus"
+    assert response_body[1]["description"] == "Hottest planet in our solar system."
+    assert response_body[1]["radius"] == 3760.4
+    assert response_body[2]["name"] == "Mars"
+    assert response_body[2]["description"] == "Also known as the Red Planet"
+    assert response_body[2]["radius"] == 1511

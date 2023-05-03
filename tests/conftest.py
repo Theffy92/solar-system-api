@@ -31,3 +31,18 @@ def one_planet(app):
     db.session.add(planet)
     db.session.commit()
     return planet
+
+@pytest.fixture
+def saved_planets(app):
+    mercury = Planet(name="Mercury",
+                     description = "Closest planet to the sun",
+                     radius=1516)
+    venus = Planet(name="Venus",
+                   description= "Hottest planet in our solar system.",
+                   radius=3760.4)
+    mars=Planet(name="Mars",
+                description="Also known as the Red Planet",
+                radius=1511)
+    
+    db.session.add_all([mercury, venus, mars])
+    db.session.commit()
