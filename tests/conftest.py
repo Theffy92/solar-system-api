@@ -2,6 +2,7 @@ import pytest
 from app import create_app
 from app import db
 from flask.signals import request_finished
+from app.models.planet import Planet
 
 
 @pytest.fixture
@@ -23,3 +24,10 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+@pytest.fixture
+def one_planet(app):
+    planet = Planet(name="Mars", description="We are here!", radius="3958.8")
+    db.session.add(planet)
+    db.session.commit()
+    return planet
