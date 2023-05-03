@@ -38,3 +38,15 @@ def test_get_all_planets_from_database(client, saved_planets):
     assert response_body[2]["name"] == "Mars"
     assert response_body[2]["description"] == "Also known as the Red Planet"
     assert response_body[2]["radius"] == 1511
+
+def test_create_one_planet(client):
+    EXPECTED_PLANET= dict(
+        name= "Jupiter",
+        description= "Largest planet in our solar system.",
+        radius= 43441
+    )
+    response = client.post("/planets", json= EXPECTED_PLANET)
+    response_body = response.get_data(as_text=True)
+
+    assert response.status_code == 201
+    assert response_body == f"Planet {EXPECTED_PLANET['name']} successfully created"
