@@ -1,3 +1,8 @@
+from app.model_helpers import validate_model
+from app.models.planet import Planet
+from werkzeug.exceptions import HTTPException
+import pytest
+
 def test_get_all_planets_with_no_records(client):
     response = client.get("/planets")
     response_body = response.get_json()
@@ -20,7 +25,7 @@ def test_get_one_planet_from_empty_database(client):
     response_body = response.get_json()
 
     assert response.status_code == 404
-    assert response_body == {'message': 'planet 200 not found'}
+    assert response_body == {'message': 'Planet 200 not found'}
     
 def test_get_all_planets_from_database(client, saved_planets):
     response = client.get("/planets")
@@ -50,6 +55,23 @@ def test_create_one_planet(client):
 
     assert response.status_code == 201
     assert response_body == f"Planet {EXPECTED_PLANET['name']} successfully created"
+
+def test_validate_planet(saved_planets):
+    result = validate_model(Planet, 1)
+    assert result.id == 1
+    assert result.name == "Mercury"
+    assert result.description == "Closest planet to the sun"
+    assert result.radius == 1516
+
+def test_validate_nonint_planet(saved_planets):
+    with pytest.raises(HTTPException):
+        validate_model(Planet, "three")
+
+def test_validate_nonexisting_planet(saved_planets):
+    with pytest.raises(HTTPException):
+        validate_model(Planet, 356)
+
+
 
 
 
