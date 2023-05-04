@@ -137,5 +137,62 @@ def test_delete_planet_invalid_id(client, saved_planets):
     assert response.status_code == 400
     assert response_body == {"message": "Planet luna invalid"}
 
+def test_get_planet_by_name(client, saved_planets):
+    param = {"name": "Mercury"}
+    response = client.get("/planets", query_string=param)
+    response_body = response.get_json()
 
+    assert len(response_body) == 1
+    assert response_body[0] == {
+        "id": 1,
+        "name":"Mercury",
+        "description":"Closest planet to the sun",
+        "radius":1516,
+        }
+    assert response.status_code == 200
+
+def test_get_planet_by_partial_description(client, saved_planets):
+    param = {"description": "planet"}
+    response = client.get("/planets", query_string=param)
+    response_body = response.get_json()
+
+    assert len(response_body) == 3
+    assert response_body == [{
+        "id": 1,
+        "name":"Mercury",
+        "description":"Closest planet to the sun",
+        "radius":1516,
+        },
+        dict(id=2,
+        name="Venus",
+        description= "Hottest planet in our solar system.",
+        radius=3760.4
+        ),
+        dict(
+        id=3,
+        name="Mars",
+        description="Also known as the Red Planet",
+        radius=1511
+        )]
+    assert response.status_code == 200
+
+def test_get_planets_greater_than_certain_radius(client, saved_planets):
+    param = {"radius": 1515}
+    response = client.get("/planets", query_string=param)
+    response_body = response.get_json()
+
+    assert len(response_body) == 2
+    assert response_body == [{
+        "id": 1,
+        "name":"Mercury",
+        "description":"Closest planet to the sun",
+        "radius":1516,
+        },
+        dict(id=2,
+        name="Venus",
+        description= "Hottest planet in our solar system.",
+        radius=3760.4
+        ),
+        ]
+    assert response.status_code == 200
 

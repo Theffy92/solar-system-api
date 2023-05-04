@@ -19,11 +19,26 @@ def create_planet():
 
 @bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
-    planets = Planet.query.all()
 
-    for planet in planets:
-        planets_response.append(planet.to_dict())
+    name_param = request.args.get("name")
+    description_param = request.args.get("description")
+    radius_param = request.args.get("radius")
+
+    planet_query = Planet.query
+
+    if name_param:
+        planet_query = planet_query.filter_by(name=name_param)
+    if description_param:
+        planet_query = planet_query.filter(Planet.description.ilike(
+            f"%{description_param}%"))
+    if radius_param:
+        # filter planets with a radius greater than query param
+        # How can we give the option of filter lesser than or greater than?
+        # Would we need to prompt the user to include that param and then build
+        # conditionals to check if they want to find greater or less than?
+        planet_query = planet_query.filter(Planet.radius>radius_param)
+    
+    planets_response = [planet.to_dict() for planet in planet_query]
     
     return jsonify(planets_response)
 
@@ -45,7 +60,7 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(jsonify(f"Planet #{planet.id} successfully updated"))
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated"), 200)
 
 
 @bp.route("/<planet_id>", methods=["DELETE"])
@@ -54,7 +69,7 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(jsonify(f"Planet #{planet_id} successfully deleted"))
+    return make_response(jsonify(f"Planet #{planet_id} successfully deleted"), 200)
 
 
 # class Planet:
