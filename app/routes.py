@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, abort, make_response, request
 from app import db
 from app.models.planet import Planet
-from app.model_helpers import validate_model
+from app.route_helpers import validate_model
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
@@ -45,7 +45,7 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully updated", 200)
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated"))
 
 
 @bp.route("/<planet_id>", methods=["DELETE"])
@@ -54,7 +54,7 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet_id} successfully deleted", 200)
+    return make_response(jsonify(f"Planet #{planet_id} successfully deleted"))
 
 
 # class Planet:
