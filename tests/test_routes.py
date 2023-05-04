@@ -50,3 +50,8 @@ def test_create_one_planet(client):
 
     assert response.status_code == 201
     assert response_body == f"Planet {EXPECTED_PLANET['name']} successfully created"
+
+
+
+
+
