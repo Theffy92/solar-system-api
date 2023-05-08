@@ -5,6 +5,7 @@ class Planet(db.Model):
     name = db.Column(db.String)
     description = db.Column(db.String)
     radius = db.Column(db.Float)
+    moons = db.relationship("Moon", back_populates="planet")
     
     @classmethod
     def from_dict(cls, planet_data):
